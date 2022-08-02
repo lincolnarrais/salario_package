@@ -1,7 +1,6 @@
 import 'i_salario_data.dart';
 
 class SalarioDataFromMap implements ISalarioData {
-  /// Salário mínimo vigente
   final double _salarioMinimo;
 
   // INSS
@@ -51,7 +50,6 @@ class SalarioDataFromMap implements ISalarioData {
         _irrfPercDescontoPatamar4 = map['irrfPercDescontoPatamar4']!,
         _irrfAbatimentoPorDependente = map['irrfAbatimentoPorDependente']!;
 
-  /// Salário mínimo vigente
   @override
   double get salarioMinimo => _salarioMinimo;
 

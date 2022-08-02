@@ -1,7 +1,6 @@
 import 'i_salario_data.dart';
 
 class SalarioData implements ISalarioData {
-  /// Salário mínimo vigente
   @override
   double get salarioMinimo => 1212.0;
 

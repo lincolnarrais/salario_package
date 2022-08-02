@@ -1,8 +1,9 @@
+/// Exemplo usando o salário do prefeito de Camocim - CE,
+/// que é de R$ 16.500,00.
+
 import 'package:salario_package/salario_package.dart';
 
-Future<void> main(List<String> arguments) async {
-  final map = await SalarioDataRequestFromGist().request();
-  final salarioData = SalarioDataFromMap(map);
-  final salario = Salario(salarioBruto: 16500, salarioData: salarioData);
+void main(List<String> arguments) {
+  final salario = Salario(salarioBruto: 16500);
   print(salario);
 }

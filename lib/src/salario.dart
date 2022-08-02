@@ -3,30 +3,38 @@ import 'dart:math' as math;
 import 'package:intl/intl.dart';
 
 import 'i_salario_data.dart';
+import 'salario_data.dart';
 
 class Salario {
+  /// Valor total recebido, sem quaisquer descontos.
   final double salarioBruto;
+
+  /// Quantidade de dependentes.
   final int qtdeDependentes;
+
+  /// Valor pago de pensão alimentícia.
   final double descontoPensaoAlimenticia;
-  final ISalarioData salarioData;
+
+  /// Dados que o programa utiliza para calcular os impostos.
+  final ISalarioData _salarioData;
 
   Salario({
     required this.salarioBruto,
     this.qtdeDependentes = 0,
     this.descontoPensaoAlimenticia = 0,
-    required this.salarioData,
-  });
+    ISalarioData? salarioData,
+  }) : _salarioData = salarioData ?? SalarioData();
 
   double get _descontoInss {
-    final d1 = salarioData.inssPercDescontoPatamar1;
-    final d2 = salarioData.inssPercDescontoPatamar2;
-    final d3 = salarioData.inssPercDescontoPatamar3;
-    final d4 = salarioData.inssPercDescontoPatamar4;
+    final d1 = _salarioData.inssPercDescontoPatamar1;
+    final d2 = _salarioData.inssPercDescontoPatamar2;
+    final d3 = _salarioData.inssPercDescontoPatamar3;
+    final d4 = _salarioData.inssPercDescontoPatamar4;
 
-    final v1 = salarioData.inssValorMaximoPatamar1;
-    final v2 = salarioData.inssValorMaximoPatamar2;
-    final v3 = salarioData.inssValorMaximoPatamar3;
-    final v4 = salarioData.inssValorMaximoPatamar4;
+    final v1 = _salarioData.inssValorMaximoPatamar1;
+    final v2 = _salarioData.inssValorMaximoPatamar2;
+    final v3 = _salarioData.inssValorMaximoPatamar3;
+    final v4 = _salarioData.inssValorMaximoPatamar4;
 
     final descontoMaximoPatamar1 = v1 * d1;
     final descontoMaximoPatamar2 = (v2 - v1) * d2 + descontoMaximoPatamar1;
@@ -53,18 +61,18 @@ class Salario {
   }
 
   double get _descontoIrrf {
-    final isento = salarioData.irrfValorMaximoIsento;
+    final isento = _salarioData.irrfValorMaximoIsento;
 
-    final v1 = salarioData.irrfValorMaximoPatamar1;
-    final v2 = salarioData.irrfValorMaximoPatamar2;
-    final v3 = salarioData.irrfValorMaximoPatamar3;
+    final v1 = _salarioData.irrfValorMaximoPatamar1;
+    final v2 = _salarioData.irrfValorMaximoPatamar2;
+    final v3 = _salarioData.irrfValorMaximoPatamar3;
 
-    final d1 = salarioData.irrfPercDescontoPatamar1;
-    final d2 = salarioData.irrfPercDescontoPatamar2;
-    final d3 = salarioData.irrfPercDescontoPatamar3;
-    final d4 = salarioData.irrfPercDescontoPatamar4;
+    final d1 = _salarioData.irrfPercDescontoPatamar1;
+    final d2 = _salarioData.irrfPercDescontoPatamar2;
+    final d3 = _salarioData.irrfPercDescontoPatamar3;
+    final d4 = _salarioData.irrfPercDescontoPatamar4;
 
-    final abatimentoPorDependente = salarioData.irrfAbatimentoPorDependente;
+    final abatimentoPorDependente = _salarioData.irrfAbatimentoPorDependente;
 
     final descontoMaximoPatamar1 = (v1 - isento) * d1;
     final descontoMaximoPatamar2 = (v2 - v1) * d2 + descontoMaximoPatamar1;
@@ -95,13 +103,25 @@ class Salario {
     return desconto;
   }
 
+  /// Calcula o valor do desconto do INSS.
   double get descontoInss => _descontoInss.toPrecision(2);
+
+  /// Calcula o valor do desconto do IRRF.
   double get descontoIrrf => _descontoIrrf.toPrecision(2);
+
   double get _descontoTotal => (_descontoInss + _descontoIrrf);
+
   double get descontoTotal => _descontoTotal.toPrecision(2);
+
+  /// Calcula o valor do salário líquido, ou seja, após todos os descontos.
   double get salarioLiquido => (salarioBruto - _descontoTotal).toPrecision(2);
+
+  /// Calcula a porcentagem de desconto do INSS.
   double get percDescontoInss => (_descontoInss / salarioBruto).toPrecision(4);
+
+  /// Calcula a porcentagem de desconto do IRRF.
   double get percDescontoIrrf => (_descontoIrrf / salarioBruto).toPrecision(4);
+
   double get percDescontoTotal =>
       (_descontoTotal / salarioBruto).toPrecision(4);
 
