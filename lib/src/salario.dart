@@ -16,6 +16,13 @@ class Salario {
   final double descontoPensaoAlimenticia;
 
   /// Dados que o programa utiliza para calcular os impostos.
+  ///
+  /// Caso seja nulo, por padrão pegará [SalarioData] para usar
+  /// os dados hardcoded no programa.
+  ///
+  /// Para usar dados externos, utilize um dos construtores
+  /// [SalarioData.custom], [SalarioData.fromMap] ou
+  /// [SalarioData.fromJson].
   final ISalarioData _salarioData;
 
   Salario({

@@ -1,5 +1,4 @@
 import 'package:salario_package/salario_package.dart';
-import 'package:salario_package/src/salario_data.dart';
 import 'package:test/test.dart';
 
 void main() {
